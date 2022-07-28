@@ -51,6 +51,7 @@ mod_import_datasets_server <- function(id, parent_session){
       to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
       to_return$type <- "dataset"
       to_return$protocole <- input$available_datasets
+      to_return$parameters_text <- paste("Importation du jeu de données issu du protocole :", input$available_datasets)
 
       # go to next step UI
       updateTabsetPanel(session = parent_session, "vigie_nature_analyse",

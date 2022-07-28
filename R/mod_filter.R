@@ -18,8 +18,7 @@ mod_filter_ui <- function(id){
     actionButton(ns("valid_filter"), label = "Valider le filre",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
     helpText("Prévisualisation du jeu de données"),
-    tableOutput(ns("dataset_preview")),
-    actionButton(ns("print_input_mod"), "print ui input (to be deleted")
+    tableOutput(ns("dataset_preview"))
   )
 }
 
@@ -29,29 +28,24 @@ mod_filter_ui <- function(id){
 mod_filter_server <- function(id, history_datasets, step_nb, parent_session, main_session){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
+
+    # add reactive values to store data
     rv <- reactiveValues(active_dataset = NULL,
                          tool_result = NULL)
+
+    # ReactiveValue to return
+    toReturn <- reactiveValues(result = NULL, trigger = NULL)
 
     cat("data wrangling : Filter\n")
     # populate select with datasets names
     datasets_names <- names(history_datasets)
-    print(datasets_names)
     updateSelectInput(session = main_session,
                       inputId = "manip_dataset-filter-select_dataset",
                       choices = datasets_names)
 
     # populate columns with columns names
     observeEvent(ns(input$select_dataset), {
-      print("select_col")
-      print("name")
-      print(ns(input$select_dataset))
-      print("test [[]]")
-      print(input[["manip_dataset-filter-select_dataset"]] )
-      print("new format $` `")
-      print(input$`manip_dataset-filter-select_dataset`)
-      print("try input")
-      print(input)
-     if (!is.null(input[["filter-select_dataset"]] )){
+     if (!is.null(input[["manip_dataset-filter-select_dataset"]] )){
           cat("update column\n\n")
           # allocate active dataset
           rv$active_dataset <- history_datasets[[input$select_dataset]]
@@ -60,6 +54,7 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
       }
     })
 
+    # populate filter type according to column type
     observeEvent(input$select_column, {
       if (input$select_column != "") {
         # get datatype of the column
@@ -78,6 +73,7 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
       }
     })
 
+    # filter dataset
     observe({
       if(!is.null(input$select_column)){
         if(input$select_column != "" & input$select_type != "" & input$filter_pattern != "") {
@@ -100,27 +96,19 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
       }
     })
 
+    # show preview of the filter
     output$dataset_preview <- renderTable({
-      head(rv$tool_result)
+      head(rv$tool_result, 20)
     })
 
-    # ReactiveValue to return
-    toReturn <- reactiveValues(result = NULL, trigger = NULL)
 
-    # Apply function on variable
+
+    # store data
     observeEvent(input$valid_filter, {
       # record values
       toReturn$trigger <- ifelse(is.null(toReturn$trigger), 0, toReturn$trigger) + 1
       toReturn$result  <- rv$tool_result
       toReturn$parameters <- list() # to do : add parameters for report
-      # remove UI
-      hide("select_dataset")
-      hide("select_column")
-    })
-
-    # test
-    observeEvent(input$print_input_mod,{
-      print(reactiveValuesToList(input))
     })
 
     return(toReturn)

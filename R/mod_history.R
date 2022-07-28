@@ -28,8 +28,7 @@ mod_history_server <- function(id, history_datasets, step_nb){
     step_id <- as.numeric(sub(".*_", "", history_names))
     index_current_step <- which(step_id == step_nb)
 
-    # add history step according to data type
-
+    # add history step box according to data type
     if (history_datasets[[history_names[index_current_step]]][["type"]] == "dataset"){
 
       insertUI(selector = "#history_reference", where = "afterEnd",
@@ -50,8 +49,8 @@ border-top-color:#ffc455;
 
 
                  box(
-                   title = p(history_datasets[[history_names[index_current_step]]][["type"]], dashboardLabel(step_nb, status = "primary")),
-                   id = "mybox",
+                   title = p(dashboardLabel(paste("Étape", step_nb), status = "primary"), "Jeu de données"),
+                   id = paste0("history_", step_nb),
                    closable = FALSE,
                    width = 12,
                    solidHeader = TRUE,
@@ -80,7 +79,7 @@ border-top-color:#ffc455;
                        ),
                        tabPanel("Paramètres utilisés",
                                 helpText("Voici les paramètres que vous avez utilisés :"),
-                                p(history_datasets[[history_names[index_current_step]]][["protocole"]])
+                                p(history_datasets[[history_names[index_current_step]]][["parameters_text"]])
                        )
                      )
                    )
@@ -95,7 +94,7 @@ border-top-color:#ffc455;
 
                  box(
                    title = p(dashboardLabel(paste("Étape", step_nb), status = "primary"), "Question de recherche"),
-                   id = "mybox",
+                   id = paste0("history_", step_nb),
                    closable = FALSE,
                    width = 12,
                    solidHeader = TRUE,
@@ -111,11 +110,13 @@ border-top-color:#ffc455;
       )
 
     }
+
+
   })
+
+  if (step_nb > 1){
+    cat('collapse box\n')
+    # add code to collapse the box before
+  }
+
 }
-
-## To be copied in the UI
-# mod_history_ui("history_1")
-
-## To be copied in the server
-# mod_history_server("history_1")

@@ -9,14 +9,15 @@
 #' @noRd
 app_ui <- function(request) {
   tagList(
+    # Use js and dashboard function - for boxes and show / hide content
     useShinyjs(),
     useShinydashboardPlus(),
     # Leave this function for adding external resources
     golem_add_external_resources(),
-    # Your application UI logic
+    # Our application UI logic
     fluidPage(
       setBackgroundColor(color = "#037971"),
-      #have diferent pages for each steps
+      # Have different pages for each steps
       navbarPage("Vigie-Nature Analyse", id = "vigie_nature_analyse",
                  # home page
                  tabPanel("Start",
