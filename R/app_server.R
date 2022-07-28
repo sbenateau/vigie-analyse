@@ -1,9 +1,49 @@
+jscode <- "shinyjs.collapse = function(boxid) {$('#' + boxid).closest('.box').find('[data-widget=collapse]').click();}"
+
+
 #' The application server-side
 #'
 #' @param input,output,session Internal parameters for {shiny}.
-#'     DO NOT REMOVE.
 #' @import shiny
 #' @noRd
+#'
 app_server <- function(input, output, session) {
-  # Your application server logic
+
+  history <- reactiveValues()
+
+  # navigate between pages
+  observeEvent(input$start_analysis,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "question")
+  })
+
+  question_result <- mod_question_server("question", parent_session = session)
+  import_result <- mod_import_datasets_server("import_dataset", parent_session = session)
+
+
+  # store question result and add it to the history
+  if(exists("question_result")){
+    observeEvent(question_result$trigger,{
+      history[["step_1"]] <- question_result
+      mod_history_server("question", history, 1)
+    })
+  }
+
+  # store datasets result and add it to the history
+  if(exists("import_result")){
+    observeEvent(import_result$trigger,{
+      cat("imported values\n")
+      step_nb <- length(reactiveValuesToList(history)) + 1
+      history[[paste0("step_", step_nb)]] <- import_result
+      mod_history_server("manip", history, step_nb)
+      mod_manip_choice_server("manip_dataset", history, 3, parent_session = session) # A MODIFIER !!!!!!!
+    })
+
+    # test
+    observeEvent(input$print_input,{
+      print(reactiveValuesToList(input))
+    })
+
+  }
+
 }
