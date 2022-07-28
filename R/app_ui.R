@@ -54,7 +54,8 @@ app_ui <- function(request) {
 
                           column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
-                                 mod_manip_choice_ui("manip_dataset")
+                                 mod_manip_choice_ui("manip_dataset"),
+                                 actionButton('test', 'test res')
                           )
                  )
       ),

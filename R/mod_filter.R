@@ -34,28 +34,42 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
                          tool_result = NULL)
 
     # ReactiveValue to return
-    toReturn <- reactiveValues(result = NULL, trigger = NULL)
+    to_return <- reactiveValues(result = NULL,
+                               trigger = NULL)
 
     cat("data wrangling : Filter\n")
+
+
     # populate select with datasets names
+
+    # filter datasets only
     datasets_names <- names(history_datasets)
-    updateSelectInput(session = main_session,
-                      inputId = "manip_dataset-filter-select_dataset",
-                      choices = datasets_names)
+    datasets_names_keep <- rep(TRUE, length(datasets_names))
+    if(length(datasets_names) > 1) {
+      cat("  update dataset list\n")
+      for (i in seq_along(datasets_names)){
+        datasets_names_keep[i] <- ifelse(history_datasets[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
+      }
+      datasets_names <- datasets_names[datasets_names_keep]
+      updateSelectInput(session = main_session,
+                        inputId = ns("select_dataset"),
+                        choices = datasets_names)
+    }
 
     # populate columns with columns names
-    observeEvent(ns(input$select_dataset), {
-     if (!is.null(input[["manip_dataset-filter-select_dataset"]] )){
-          cat("update column\n\n")
-          # allocate active dataset
-          rv$active_dataset <- history_datasets[[input$select_dataset]]
-          active_dataset_columns <- colnames(rv$active_dataset)
-          updateSelectInput(session = main_session, inputId = "manip_dataset-filter-select_column", choices = active_dataset_columns)
+    observeEvent(input$select_dataset, {
+      if (!is.null(input$select_dataset) & input$select_dataset != ""){
+        cat("  update columns list\n")
+        # allocate active dataset
+        rv$active_dataset <- history_datasets[[input$select_dataset]][["dataset"]]
+        active_dataset_columns <- colnames(rv$active_dataset)
+        updateSelectInput(session = main_session, inputId = ns("select_column"), choices = active_dataset_columns)
       }
     })
 
     # populate filter type according to column type
     observeEvent(input$select_column, {
+      cat("  update type list\n")
       if (input$select_column != "") {
         # get datatype of the column
         column_type = class(unlist(rv$active_dataset[input$select_column]))
@@ -77,6 +91,7 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
     observe({
       if(!is.null(input$select_column)){
         if(input$select_column != "" & input$select_type != "" & input$filter_pattern != "") {
+          cat("  calculate result for preview\n")
           if (input$select_type == "supérieure") {
             rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] > input$filter_pattern)
           } else if (input$select_type == "inférieure") {
@@ -105,13 +120,16 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
 
     # store data
     observeEvent(input$valid_filter, {
+      req(exists("to_return"))
+      cat("  validate result and return from tool\n")
       # record values
-      toReturn$trigger <- ifelse(is.null(toReturn$trigger), 0, toReturn$trigger) + 1
-      toReturn$result  <- rv$tool_result
-      toReturn$parameters <- list() # to do : add parameters for report
+      to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
+      to_return$dataset  <- rv$tool_result
+      to_return$parameters <- list() # to do : add parameters for report
+      to_return$parameters_text <- paste("Vous avez filtré le jeu de données")
     })
 
-    return(toReturn)
+    return(to_return)
 
   })
 }

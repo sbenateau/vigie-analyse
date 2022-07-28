@@ -25,7 +25,7 @@ mod_import_datasets_ui <- function(id){
 #' @noRd
 mod_import_datasets_server <- function(id, parent_session){
   moduleServer( id, function(input, output, session){
-    cat("start import module\n")
+    cat("  start import module\n")
     ns <- session$ns
 
     # ReactiveValue to return
@@ -47,6 +47,7 @@ mod_import_datasets_server <- function(id, parent_session){
     })
 
     observeEvent(input$validate_dataset,{
+      cat("02_validate import\n")
       # record values
       to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
       to_return$type <- "dataset"

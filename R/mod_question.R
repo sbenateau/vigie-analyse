@@ -24,6 +24,8 @@ mod_question_ui <- function(id){
 #' @noRd
 mod_question_server <- function(id, parent_session){
   moduleServer( id, function(input, output, session){
+
+    cat("  start question module\n")
     ns <- session$ns
 
     # ReactiveValue to return
@@ -33,17 +35,14 @@ mod_question_server <- function(id, parent_session){
     # When user press validate question
     # Record values, show output, go to next step
     observeEvent(input$validate_question, {
-      cat("Validate question\n")
+      cat("01_validate question\n")
 
       # record values
       to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
       to_return$type <- "question"
       to_return$question_text  <- input$question
 
-      # render question
-      output$question_output <- renderText({
-        input$question
-      })
+
 
       # hide UI
       hide("question")
@@ -54,6 +53,11 @@ mod_question_server <- function(id, parent_session){
                         selected = "import")
       # shinyjs::reset(ns("validate_question"))
 
+    })
+
+    # render question
+    output$question_output <- renderText({
+      to_return$question_text
     })
     return(to_return)
   })
