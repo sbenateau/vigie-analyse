@@ -10,6 +10,9 @@
 mod_import_datasets_ui <- function(id){
   ns <- NS(id)
   tagList(
+    br(),
+    h2("Etape 2 : Importation des données"),
+    br(),
     selectInput(ns("available_datasets"), "Sélectionner le jeu de données à importer", c("Biolit", "Sauvages de ma Rue")),
     actionButton(ns("validate_dataset"), "Valider le jeu de données",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),

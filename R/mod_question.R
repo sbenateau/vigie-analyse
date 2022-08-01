@@ -11,6 +11,8 @@ mod_question_ui <- function(id){
   ns <- NS(id)
   tagList(
     br(),
+    h2("Etape 1 : Question de recherche"),
+    br(),
     textAreaInput(ns("question"), "Écrire votre question de recherche", width = "90%", rows = 5, resize = "none"),
     column(width = 4, offset = 8,
     actionButton(ns("validate_question"), "Valider la question", style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),

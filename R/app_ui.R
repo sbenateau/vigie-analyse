@@ -55,12 +55,14 @@ app_ui <- function(request) {
                           column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
                                  mod_manip_choice_ui("manip_dataset"),
+                                 mod_filter_ui("filter"),
                                  actionButton('test', 'test res')
                           )
                  )
       ),
       # had reference to create hitory below the app
       br(),br(),
+      actionButton("browser", "browser_app"),
       div(id="history_reference")
     )
   )

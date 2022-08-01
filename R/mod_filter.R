@@ -18,14 +18,16 @@ mod_filter_ui <- function(id){
     actionButton(ns("valid_filter"), label = "Valider le filre",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
     helpText("Prévisualisation du jeu de données"),
-    tableOutput(ns("dataset_preview"))
+    tags$div(style = 'overflow-x: scroll',
+             tableOutput(ns("dataset_preview"))
+    )
   )
 }
 
 #' filter Server Functions
 #'
 #' @noRd
-mod_filter_server <- function(id, history_datasets, step_nb, parent_session, main_session){
+mod_filter_server <- function(id, history_datasets, step_nb, parent_session){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
@@ -35,7 +37,7 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
 
     # ReactiveValue to return
     to_return <- reactiveValues(result = NULL,
-                               trigger = NULL)
+                                trigger = NULL)
 
     cat("data wrangling : Filter\n")
 
@@ -45,91 +47,92 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session, mai
     # filter datasets only
     datasets_names <- names(history_datasets)
     datasets_names_keep <- rep(TRUE, length(datasets_names))
+
     if(length(datasets_names) > 1) {
       cat("  update dataset list\n")
       for (i in seq_along(datasets_names)){
         datasets_names_keep[i] <- ifelse(history_datasets[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
       }
       datasets_names <- datasets_names[datasets_names_keep]
-      updateSelectInput(session = main_session,
-                        inputId = ns("select_dataset"),
-                        choices = datasets_names)
+         updateSelectInput(session = parent_session,
+                           inputId = ns("select_dataset"),
+                           choices = datasets_names)
     }
 
-    # populate columns with columns names
-    observeEvent(input$select_dataset, {
-      if (!is.null(input$select_dataset) & input$select_dataset != ""){
-        cat("  update columns list\n")
-        # allocate active dataset
-        rv$active_dataset <- history_datasets[[input$select_dataset]][["dataset"]]
-        active_dataset_columns <- colnames(rv$active_dataset)
-        updateSelectInput(session = main_session, inputId = ns("select_column"), choices = active_dataset_columns)
-      }
-    })
-
-    # populate filter type according to column type
-    observeEvent(input$select_column, {
-      cat("  update type list\n")
-      if (input$select_column != "") {
-        # get datatype of the column
-        column_type = class(unlist(rv$active_dataset[input$select_column]))
-        if (column_type == "numeric"){
-          column_type_text = "numérique"
-          filter_options = c("supérieure", "inférieure", "égale", "supérieure ou égale", "inférieure ou égale")
-        } else {
-          column_type_text = "chaine de caractères"
-          filter_options = c("exactement égale", "partiellement égale")
+      # populate columns with columns names
+      observeEvent(input$select_dataset, {
+        if (!is.null(input$select_dataset) & input$select_dataset != ""){
+          cat("  update columns list\n")
+          # allocate active dataset
+          rv$active_dataset <- history_datasets[[input$select_dataset]][["dataset"]]
+          active_dataset_columns <- colnames(rv$active_dataset)
+          updateSelectInput(session = parent_session, inputId = ns("select_column"), choices = active_dataset_columns)
         }
-        updateSelectInput(session = session, inputId = "select_type", choices = filter_options)
-        output$help_text_column <- renderText({
-          paste("Cette colonne est de type :", column_type_text)
-        })
-      }
-    })
+      })
 
-    # filter dataset
-    observe({
-      if(!is.null(input$select_column)){
-        if(input$select_column != "" & input$select_type != "" & input$filter_pattern != "") {
-          cat("  calculate result for preview\n")
-          if (input$select_type == "supérieure") {
-            rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] > input$filter_pattern)
-          } else if (input$select_type == "inférieure") {
-            rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] < input$filter_pattern)
-          } else if (input$select_type == "égale") {
-            rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == input$filter_pattern)
-          } else if (input$select_type == "supérieure ou égale") {
-            rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] >= input$filter_pattern)
-          } else if (input$select_type == "inférieure ou égale") {
-            rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] <= input$filter_pattern)
-          } else if (input$select_type == "exactement égale") {
-            rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == input$filter_pattern)
-          }else if (input$select_type == "partiellement égale") {
-            rv$tool_result <- subset(rv$active_dataset, grepl(input$filter_pattern, rv$active_dataset[ , input$select_column]))
+      # populate filter type according to column type
+      observeEvent(input$select_column, {
+        cat("  update type list\n")
+        if (input$select_column != "") {
+          # get datatype of the column
+          column_type = class(unlist(rv$active_dataset[input$select_column]))
+          if (column_type == "numeric"){
+            column_type_text = "numérique"
+            filter_options = c("supérieure", "inférieure", "égale", "supérieure ou égale", "inférieure ou égale")
+          } else {
+            column_type_text = "chaine de caractères"
+            filter_options = c("exactement égale", "partiellement égale")
+          }
+          updateSelectInput(session = session, inputId = "select_type", choices = filter_options)
+          output$help_text_column <- renderText({
+            paste("Cette colonne est de type :", column_type_text)
+          })
+        }
+      })
+
+      # filter dataset
+      observe({
+        if(!is.null(input$select_column)){
+          if(input$select_column != "" & input$select_type != "" & input$filter_pattern != "") {
+            cat("  calculate result for preview\n")
+            if (input$select_type == "supérieure") {
+              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] > input$filter_pattern)
+            } else if (input$select_type == "inférieure") {
+              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] < input$filter_pattern)
+            } else if (input$select_type == "égale") {
+              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == input$filter_pattern)
+            } else if (input$select_type == "supérieure ou égale") {
+              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] >= input$filter_pattern)
+            } else if (input$select_type == "inférieure ou égale") {
+              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] <= input$filter_pattern)
+            } else if (input$select_type == "exactement égale") {
+              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == input$filter_pattern)
+            }else if (input$select_type == "partiellement égale") {
+              rv$tool_result <- subset(rv$active_dataset, grepl(input$filter_pattern, rv$active_dataset[ , input$select_column]))
+            }
           }
         }
-      }
-    })
+      })
 
-    # show preview of the filter
-    output$dataset_preview <- renderTable({
-      head(rv$tool_result, 20)
-    })
-
+      # show preview of the filter
+      output$dataset_preview <- renderTable({
+        head(rv$tool_result, 20)
+      })
 
 
-    # store data
-    observeEvent(input$valid_filter, {
-      req(exists("to_return"))
-      cat("  validate result and return from tool\n")
-      # record values
-      to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
-      to_return$dataset  <- rv$tool_result
-      to_return$parameters <- list() # to do : add parameters for report
-      to_return$parameters_text <- paste("Vous avez filtré le jeu de données")
-    })
 
-    return(to_return)
+      # store data
+      observeEvent(input$valid_filter, {
+        req(exists("to_return"))
+        cat("  validate result and return from tool\n")
+        # record values
+        to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
+        to_return$dataset  <- rv$tool_result
+        to_return$parameters <- list() # to do : add parameters for report
+        to_return$parameters_text <- paste("Vous avez filtré le jeu de données")
+      })
+
+      return(to_return)
 
   })
 }
