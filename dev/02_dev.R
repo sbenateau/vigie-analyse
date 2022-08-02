@@ -24,7 +24,13 @@ golem::add_module(name = "import_datasets", with_test = TRUE) # Name of the modu
 golem::add_module(name = "question", with_test = TRUE) # Name of the module
 golem::add_module(name = "history", with_test = TRUE) # Name of the module
 golem::add_module(name = "manip_choice", with_test = TRUE) # Name of the module
+golem::add_module(name = "manip_group_by", with_test = TRUE) # Name of the module
+
 golem::add_module(name = "filter", with_test = TRUE) # Name of the module
+golem::add_module(name = "visu_choice", with_test = TRUE) # Name of the module
+golem::add_module(name = "visu_graphique", with_test = TRUE) # Name of the module
+golem::add_module(name = "nav_manip", with_test = TRUE) # Name of the module
+
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*

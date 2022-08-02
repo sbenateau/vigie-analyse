@@ -13,7 +13,7 @@ mod_manip_choice_ui <- function(id){
     br(),
     h2("Etape 3 : Manipulation des données"),
     br(),
-    selectInput(ns("select_tool"), "Sélectionner un outil de manipulation de données", c("votre sélection", "Sélectionner des lignes", "other")),
+    selectInput(ns("select_tool"), "Sélectionner un outil de manipulation de données", c("votre sélection", "Regrouper des lignes", "Sélectionner des lignes", "other")),
     uiOutput(ns("module_manip_ui"))
   )
 }
@@ -33,9 +33,14 @@ mod_manip_choice_server <- function(id, analysis_history, step_nb_react, parent_
     })
     observeEvent(input$select_tool, {
       if (input$select_tool == "Sélectionner des lignes"){
-
         out_ui_manip(mod_filter_ui(ns("filter")))
         mod_filter_server("filter", analysis_history, step_nb_react,
+                          parent_session = session,
+                          main_session = parent_session)
+
+      } else if (input$select_tool == "Regrouper des lignes"){
+        out_ui_manip(mod_manip_group_by_ui(ns("group_by")))
+        mod_manip_group_by_server("group_by", analysis_history, step_nb_react,
                           parent_session = session,
                           main_session = parent_session)
 

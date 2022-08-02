@@ -137,7 +137,7 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
 
         # go to next step UI
         updateTabsetPanel(session = main_session, "vigie_nature_analyse",
-                          selected = "visu")
+                          selected = "manip_landing")
 
         step_nb_react(step_nb_react()+1)
       })

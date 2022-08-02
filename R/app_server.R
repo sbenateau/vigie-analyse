@@ -39,13 +39,48 @@ app_server <- function(input, output, session) {
   # edit report
 
   # navigation
-  observeEvent(input$import_new,{
+  observeEvent(input$import_nav_import,{
     updateTabsetPanel(session, "vigie_nature_analyse",
                       selected = "import")
   })
 
-  observeEvent(input$browser,{
-    browser()
+  observeEvent(input$import_nav_manip,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "import")
   })
 
+  observeEvent(input$import_nav_visu,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "import")
+  })
+
+  observeEvent(input$manip_nav_import,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "manip")
+  })
+
+  observeEvent(input$manip_nav_manip,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "manip")
+  })
+
+  observeEvent(input$manip_nav_visu,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "manip")
+  })
+
+  observeEvent(input$visu_nav_import,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "visu")
+  })
+
+  observeEvent(input$visu_nav_manip,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "visu")
+  })
+
+  observeEvent(input$visu_nav_visu,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "visu")
+  })
 }
