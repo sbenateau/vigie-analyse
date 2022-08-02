@@ -109,6 +109,56 @@ border-top-color:#ffc455;
 
       )
 
+    } else if (history_datasets[[history_names[index_current_step]]][["type"]] == "graphique"){
+
+      insertUI(selector = "#history_reference", where = "afterEnd",
+               tagList(
+                 tags$style(HTML("
+.box.box-solid.box-primary>.box-header {
+  color:#fff;
+  background:#ffc455;
+}
+
+.box.box-solid.box-primary{
+border-bottom-color:#ffc455;
+border-left-color:#666666;
+border-right-color:#666666;
+border-top-color:#ffc455;
+}")),
+                 br(), br(),
+
+
+                 box(
+                   title = p(dashboardLabel(paste("Étape", step_nb), status = "primary"), "Graphique"),
+                   id = paste0("history_", step_nb),
+                   closable = FALSE,
+                   width = 12,
+                   solidHeader = TRUE,
+                   status = "primary",
+                   collapsible = TRUE,
+                   dropdownMenu = boxDropdown(
+                     boxDropdownItem(id = ns("view_table"), "Voir le graphique"),
+                     boxDropdownItem("Télécharger le graphique")
+                   ),
+                   tagList(
+                     tabsetPanel(
+                       tabPanel("Graphique",
+
+                                renderPlot({
+                                  history_datasets[[history_names[index_current_step]]][["graphique"]]
+                                })
+
+
+                       ),
+                       tabPanel("Paramètres utilisés",
+                                helpText("Voici les paramètres que vous avez utilisés :"),
+                                p(history_datasets[[history_names[index_current_step]]][["parameters_text"]])
+                       )
+                     )
+                   )
+                 )
+               )
+      )
     }
 
 

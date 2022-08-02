@@ -43,10 +43,18 @@ app_ui <- function(request) {
                  ),
                  # import page
                  tabPanel("Importation des données", value = "import",
-
                           column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
                                  mod_import_datasets_ui("import_dataset")
+                          )
+                 ),
+                 tabPanel("Landing importation des données", value = "import_landing",
+                          column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                 rep_br(1),
+                                 p("Votre jeu de données a bien été importé. Il est disponible dans votre historique en dessous de ce paragraphe"),
+                                 p("Vous pouvez continuer en important un nouveau jeu de donnée, en manipulant les données ou en les visualisant"),
+                                 actionButton("import_new", "Importer un nouveau jeu de données",
+                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
                           )
                  ),
                  # data wrangling page
@@ -54,9 +62,15 @@ app_ui <- function(request) {
 
                           column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
-                                 mod_manip_choice_ui("manip_dataset"),
-                                 mod_filter_ui("filter"),
-                                 actionButton('test', 'test res')
+                                 mod_manip_choice_ui("manip_dataset")
+                          )
+                 ),
+                 # data visualisation page
+                 tabPanel("Visualisation des données", value = "visu",
+
+                          column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                 rep_br(1),
+                                 mod_visu_choice_ui("visu_dataset")
                           )
                  )
       ),

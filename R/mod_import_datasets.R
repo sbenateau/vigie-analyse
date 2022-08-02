@@ -26,15 +26,16 @@ mod_import_datasets_ui <- function(id){
 #' import_datasets Server Functions
 #'
 #' @noRd
-mod_import_datasets_server <- function(id, parent_session){
+mod_import_datasets_server <- function(id, analysis_history, step_nb_react, parent_session){
   moduleServer( id, function(input, output, session){
     cat("  start import module\n")
     ns <- session$ns
 
     # ReactiveValue to return
-    to_return <- reactiveValues(dataset = NULL,
+    to_return <- reactiveValues(type = NULL,
+                                dataset = NULL,
                                 protocole = NULL,
-                                trigger = NULL)
+                                parameters_text = NULL)
 
     # render short view of the dataset
     observeEvent(input$available_datasets,{
@@ -52,15 +53,20 @@ mod_import_datasets_server <- function(id, parent_session){
     observeEvent(input$validate_dataset,{
       cat("02_validate import\n")
       # record values
-      to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
       to_return$type <- "dataset"
       to_return$protocole <- input$available_datasets
       to_return$parameters_text <- paste("Importation du jeu de données issu du protocole :", input$available_datasets)
 
+      # store into reactive value
+      analysis_history[[paste0("step_",step_nb_react())]] <- to_return
+      mod_history_server("question", analysis_history, step_nb_react())
+
+
       # go to next step UI
       updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
-                        selected = "manip")
+                        selected = "import_landing")
+
+      step_nb_react(step_nb_react()+1)
     })
-    return(to_return)
   })
 }

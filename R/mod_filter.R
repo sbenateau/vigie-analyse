@@ -27,7 +27,7 @@ mod_filter_ui <- function(id){
 #' filter Server Functions
 #'
 #' @noRd
-mod_filter_server <- function(id, history_datasets, step_nb, parent_session){
+mod_filter_server <- function(id, analysis_history, step_nb_react, parent_session, main_session){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
@@ -45,16 +45,16 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session){
     # populate select with datasets names
 
     # filter datasets only
-    datasets_names <- names(history_datasets)
+    datasets_names <- names(analysis_history)
     datasets_names_keep <- rep(TRUE, length(datasets_names))
-
     if(length(datasets_names) > 1) {
+
       cat("  update dataset list\n")
       for (i in seq_along(datasets_names)){
-        datasets_names_keep[i] <- ifelse(history_datasets[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
+        datasets_names_keep[i] <- ifelse(analysis_history[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
       }
       datasets_names <- datasets_names[datasets_names_keep]
-         updateSelectInput(session = parent_session,
+         updateSelectInput(session = main_session,
                            inputId = ns("select_dataset"),
                            choices = datasets_names)
     }
@@ -64,9 +64,9 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session){
         if (!is.null(input$select_dataset) & input$select_dataset != ""){
           cat("  update columns list\n")
           # allocate active dataset
-          rv$active_dataset <- history_datasets[[input$select_dataset]][["dataset"]]
+          rv$active_dataset <- analysis_history[[input$select_dataset]][["dataset"]]
           active_dataset_columns <- colnames(rv$active_dataset)
-          updateSelectInput(session = parent_session, inputId = ns("select_column"), choices = active_dataset_columns)
+          updateSelectInput(session = main_session, inputId = ns("select_column"), choices = active_dataset_columns)
         }
       })
 
@@ -123,16 +123,25 @@ mod_filter_server <- function(id, history_datasets, step_nb, parent_session){
 
       # store data
       observeEvent(input$valid_filter, {
-        req(exists("to_return"))
         cat("  validate result and return from tool\n")
         # record values
-        to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
         to_return$dataset  <- rv$tool_result
+        to_return$type <- "dataset"
         to_return$parameters <- list() # to do : add parameters for report
         to_return$parameters_text <- paste("Vous avez filtré le jeu de données")
+
+
+        # store into reactive value
+        analysis_history[[paste0("step_", step_nb_react())]] <- to_return
+        mod_history_server("question", analysis_history, step_nb_react())
+
+        # go to next step UI
+        updateTabsetPanel(session = main_session, "vigie_nature_analyse",
+                          selected = "visu")
+
+        step_nb_react(step_nb_react()+1)
       })
 
-      return(to_return)
 
   })
 }

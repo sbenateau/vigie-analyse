@@ -24,15 +24,15 @@ mod_question_ui <- function(id){
 #' question Server Functions
 #'
 #' @noRd
-mod_question_server <- function(id, parent_session){
+mod_question_server <- function(id, analysis_history, step_nb_react, parent_session){
   moduleServer( id, function(input, output, session){
 
     cat("  start question module\n")
     ns <- session$ns
 
     # ReactiveValue to return
-    to_return <- reactiveValues(question_text = NULL,
-                               trigger = NULL)
+    to_return <- reactiveValues(type = NULL,
+                                question_text = NULL)
 
     # When user press validate question
     # Record values, show output, go to next step
@@ -40,10 +40,12 @@ mod_question_server <- function(id, parent_session){
       cat("01_validate question\n")
 
       # record values
-      to_return$trigger <- ifelse(is.null(to_return$trigger), 0, to_return$trigger) + 1
       to_return$type <- "question"
       to_return$question_text  <- input$question
 
+      # store into reactive value
+      analysis_history[["step_1"]] <- to_return
+      mod_history_server("question", analysis_history, step_nb_react())
 
 
       # hide UI
@@ -54,14 +56,13 @@ mod_question_server <- function(id, parent_session){
       updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
                         selected = "import")
       # shinyjs::reset(ns("validate_question"))
-
+      step_nb_react(step_nb_react()+1)
     })
 
     # render question
     output$question_output <- renderText({
       to_return$question_text
     })
-    return(to_return)
   })
 
 
