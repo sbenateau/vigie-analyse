@@ -15,7 +15,7 @@ mod_manip_group_by_ui <- function(id){
     selectInput(ns("select_columns_group"), label = "selon des catégories contenues dans la ou les colonnes suivantes", choices = NULL, multiple = TRUE),
     # textOutput(ns("help_text_column")), # preciser par exemple attention si une valeur quanti
     selectInput(ns("select_operation"), label = "en faisant la ou les opération suivante", choices = c("moyenne", "médiane", "somme", "compte", "compte des valeurs supérieures à zéro", "Écart-type", "Erreur standard"), multiple = TRUE),
-    selectInput(ns("select_column_operation"), label = " sur la colonne", choices = NULL, multiple = FALSE),
+    selectInput(ns("select_column_operation"), label = " sur la colonne", choices = NULL, multiple = FALSE), # TO DO : remove if count
 
     actionButton(ns("valid_tool"), label = "Valider le filre",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
@@ -75,13 +75,16 @@ mod_manip_group_by_server <- function(id, analysis_history, step_nb_react, paren
     # calculate dataset
     observe({
       if(!is.null(input$select_columns_group)){
-        if(input$select_columns_group != "" & input$select_column_operation != "") {
+        if(input$select_columns_group != "" && input$select_column_operation != "") {
+          if(input$select_column_operation %in% input$select_columns_group) {
+            error_text = "Attention la colonne sur laquelle vous faite le calcul ne peut pas être présente deux fois"
+          }
           cat("  calculate result for preview\n")
-
+browser()
 
           rv$tool_result <- rv$active_dataset %>%
             group_by_at(input$select_columns_group) %>%
-            summarise_at(.vars = input$select_column_operation, .funs = "mean")
+            summarise_at(.vars = input$select_column_operation, .funs = c("mean", "sum"))
         }
       }
     })
