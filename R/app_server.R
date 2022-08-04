@@ -18,7 +18,6 @@ app_server <- function(input, output, session) {
   analysis_history <- reactiveValues()
   # used as parameter for a lot of functions
   step_nb_react <- reactiveVal(1)
-  gargoyle::init("valid_manip")
 
   # navigate between pages at the start of the application
   observeEvent(input$start_analysis,{
@@ -31,6 +30,7 @@ app_server <- function(input, output, session) {
   mod_import_datasets_server("import_dataset", analysis_history, step_nb_react, parent_session = session)
   mod_manip_choice_server("manip_dataset", analysis_history, step_nb_react, parent_session = session)
   mod_visu_choice_server("visu_dataset", analysis_history, step_nb_react, parent_session = session)
+  mod_report_server("report", analysis_history)
 
   # choose statistical test and dataset
 

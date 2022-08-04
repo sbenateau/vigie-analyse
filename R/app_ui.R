@@ -64,7 +64,7 @@ app_ui <- function(request) {
                  # data wrangling page
                  tabPanel("Manipulation des données", value = "manip",
 
-                          column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                          column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
                                  mod_manip_choice_ui("manip_dataset")
                           )
@@ -102,10 +102,16 @@ app_ui <- function(request) {
                                  actionButton("visu_nav_visu", "Visualiser les données",
                                               style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
                           )
+                 ),
+                 tabPanel("Landing visualisation des données", value = "visu_landing",
+                          column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                 rep_br(1),
+                                 mod_report_ui("report")
+                          )
                  )
       ),
       # had reference to create hitory below the app
-      br(),br(),
+      rep_br(2),
       div(id="history_reference")
     )
   )

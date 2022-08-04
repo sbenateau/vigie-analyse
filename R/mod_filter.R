@@ -10,12 +10,13 @@
 mod_filter_ui <- function(id){
   ns <- NS(id)
   tagList(
+    useShinyjs(),
     selectInput(ns("select_dataset"), label = "Garder les lignes du jeu de données", choices = NULL),
     selectInput(ns("select_column"), label = "dont les valeurs de la colonne", choices = NULL),
     textOutput(ns("help_text_column")),
     selectInput(ns("select_type"), label = "sont", choices = NULL),
     textInput(ns("filter_pattern"), label = "à la valeur suivante :"),
-    actionButton(ns("valid_filter"), label = "Valider le filre",
+    actionButton(ns("valid_tool"), label = "Valider le filre",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
     helpText("Prévisualisation du jeu de données"),
     tags$div(style = 'overflow-x: scroll',
@@ -36,8 +37,7 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
                          tool_result = NULL)
 
     # ReactiveValue to return
-    to_return <- reactiveValues(result = NULL,
-                                trigger = NULL)
+    to_return <- reactiveValues(result = NULL)
 
     cat("data wrangling : Filter\n")
 
@@ -76,7 +76,7 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
         if (input$select_column != "") {
           # get datatype of the column
           column_type = class(unlist(rv$active_dataset[input$select_column]))
-          if (column_type == "numeric"){
+          if (column_type == "numeric" | column_type == "integer"){
             column_type_text = "numérique"
             filter_options = c("supérieure", "inférieure", "égale", "supérieure ou égale", "inférieure ou égale")
           } else {
@@ -96,19 +96,19 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
           if(input$select_column != "" & input$select_type != "" & input$filter_pattern != "") {
             cat("  calculate result for preview\n")
             if (input$select_type == "supérieure") {
-              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] > input$filter_pattern)
+              to_return$dataset <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] > as.numeric(input$filter_pattern))
             } else if (input$select_type == "inférieure") {
-              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] < input$filter_pattern)
+              to_return$dataset <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] < as.numeric(input$filter_pattern))
             } else if (input$select_type == "égale") {
-              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == input$filter_pattern)
+              to_return$dataset <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == as.numeric(input$filter_pattern))
             } else if (input$select_type == "supérieure ou égale") {
-              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] >= input$filter_pattern)
+              to_return$dataset <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] >= as.numeric(input$filter_pattern))
             } else if (input$select_type == "inférieure ou égale") {
-              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] <= input$filter_pattern)
+              to_return$dataset <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] <= as.numeric(input$filter_pattern))
             } else if (input$select_type == "exactement égale") {
-              rv$tool_result <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == input$filter_pattern)
+              to_return$dataset <- subset(rv$active_dataset, rv$active_dataset[ , input$select_column] == input$filter_pattern)
             }else if (input$select_type == "partiellement égale") {
-              rv$tool_result <- subset(rv$active_dataset, grepl(input$filter_pattern, rv$active_dataset[ , input$select_column]))
+              to_return$dataset <- subset(rv$active_dataset, grepl(input$filter_pattern, rv$active_dataset[ , input$select_column]))
             }
           }
         }
@@ -116,17 +116,18 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
 
       # show preview of the filter
       output$dataset_preview <- renderTable({
-        head(rv$tool_result, 20)
+        head(to_return$dataset, 20)
       })
 
 
 
       # store data
-      observeEvent(input$valid_filter, {
+      observeEvent(input$valid_tool, {
         cat("  validate result and return from tool\n")
         # record values
-        to_return$dataset  <- rv$tool_result
         to_return$type <- "dataset"
+        to_return$type_precise <- "Manipulation de données"
+        to_return$tool_name <- "Sélectionner des lignes"
         to_return$parameters <- list() # to do : add parameters for report
         to_return$parameters_text <- paste("Vous avez filtré le jeu de données")
 
@@ -140,6 +141,9 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
                           selected = "manip_landing")
 
         step_nb_react(step_nb_react()+1)
+        print(input$valid_tool)
+        shinyjs::reset("valid_tool", asis = TRUE)
+        print(input$valid_tool)
       })
 
 

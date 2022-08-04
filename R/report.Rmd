@@ -1,0 +1,29 @@
+---
+title: "Rapport d'analyse de données"
+output: 
+  pdf_document :
+    toc: true
+    number_sections: true
+toc-title: "Résumé"
+params:
+  analysis_history: NA
+---
+
+```{r, results='asis', echo=FALSE}
+
+print(length(params$analysis_history))
+for (i in 1:length(params$analysis_history)){
+  current_step <- params$analysis_history[[paste0("step_",i)]]
+  
+  if (current_step$type == "question"){
+  
+  cat("# Question de recherche\n")
+  cat(current_step$question_text, "\n\n")
+  
+  } else if (current_step$type == "dataset"){
+      cat(paste("#", current_step$type_precise, ":", current_step$tool_name, "\n"))
+      cat(paste(current_step$parameters_text, "\n\n"))
+
+  } 
+}
+```
