@@ -11,7 +11,6 @@ params:
 
 ```{r, results='asis', echo=FALSE}
 
-print(length(params$analysis_history))
 for (i in 1:length(params$analysis_history)){
   current_step <- params$analysis_history[[paste0("step_",i)]]
   
@@ -24,6 +23,8 @@ for (i in 1:length(params$analysis_history)){
       cat(paste("#", current_step$type_precise, ":", current_step$tool_name, "\n"))
       cat(paste(current_step$parameters_text, "\n\n"))
 
-  } 
+  } else if (current_step$type == "graph"){
+    
+  }
 }
 ```

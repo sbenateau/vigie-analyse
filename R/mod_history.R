@@ -109,7 +109,7 @@ border-top-color:#ffc455;
 
       )
 
-    } else if (history_datasets[[history_names[index_current_step]]][["type"]] == "graphique"){
+    } else if (history_datasets[[history_names[index_current_step]]][["type"]] == "graph"){
 
       insertUI(selector = "#history_reference", where = "afterEnd",
                tagList(

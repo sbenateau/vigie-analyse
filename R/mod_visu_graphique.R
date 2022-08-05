@@ -91,7 +91,7 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
       cat("  validate result and return from tool\n")
       # record values
       to_return$graphique  <- rv$tool_result
-      to_return$type <- "graphique"
+      to_return$type <- "graph"
       to_return$parameters <- list() # to do : add parameters for report
       to_return$parameters_text <- paste("Vous avez fait un joli graphique")
 
