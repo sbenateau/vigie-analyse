@@ -5,6 +5,7 @@ output:
     toc: true
     number_sections: true
 toc-title: "Résumé"
+sansfont: Raleway
 params:
   analysis_history: NA
 ---
@@ -24,7 +25,8 @@ for (i in 1:length(params$analysis_history)){
       cat(paste(current_step$parameters_text, "\n\n"))
 
   } else if (current_step$type == "graph"){
-    
+    cat(paste("#", current_step$type_precise, ":", current_step$tool_name, "\n\n"))
+    print(current_step$graph)
   }
 }
 ```
