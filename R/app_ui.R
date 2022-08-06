@@ -66,7 +66,8 @@ app_ui <- function(request) {
 
                           column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
-                                 mod_manip_choice_ui("manip_dataset")
+                                 mod_manip_choice_ui("manip_dataset"),
+                                 div(id="manip_tool")
                           )
                  ),
                  tabPanel("Landing manipulation des données", value = "manip_landing",
@@ -87,7 +88,8 @@ app_ui <- function(request) {
 
                           column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
-                                 mod_visu_choice_ui("visu_dataset")
+                                 mod_visu_choice_ui("visu_dataset"),
+                                 div(id="visu_tool")
                           )
                  ),
                  tabPanel("Landing visualisation des données", value = "visu_landing",
@@ -103,7 +105,7 @@ app_ui <- function(request) {
                                               style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
                           )
                  ),
-                 tabPanel("Landing visualisation des données", value = "visu_landing",
+                 tabPanel("Télécharger un rapport", value = "report",
                           column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
                                  mod_report_ui("report")
