@@ -6,7 +6,8 @@
 #'
 app_server <- function(input, output, session) {
 
-  cat("start application\n")
+  # increase max dowload size for manual import
+  options(shiny.maxRequestSize=60*1024^2)
 
   # define values
 
@@ -16,29 +17,42 @@ app_server <- function(input, output, session) {
   # - figures
   # - conclusions
   analysis_history <- reactiveValues()
+
   # used as parameter for a lot of functions
+  # define the step number
   step_nb_react <- reactiveVal(1)
 
-  # navigate between pages at the start of the application
-  observeEvent(input$start_analysis,{
-    updateTabsetPanel(session, "vigie_nature_analyse",
-                      selected = "question")
-  })
-
   # launch modules
+
+  # module to write question
   mod_question_server("question", analysis_history, step_nb_react, parent_session = session)
+
+  # module to import dataset
   mod_import_datasets_server("import_dataset", analysis_history, step_nb_react, parent_session = session)
+
+  # module to choose between the different tools
   mod_manip_choice_server("manip_dataset", analysis_history, step_nb_react, parent_session = session)
+
+  # module to choose betwen visualisation
   mod_visu_choice_server("visu_dataset", analysis_history, step_nb_react, parent_session = session)
+
+  # module to download the report
   mod_report_server("report", analysis_history)
 
   # choose statistical test and dataset
 
   # write conclusion
 
-  # edit report
 
   # navigation
+
+  # navigate between pages at to start the application
+  observeEvent(input$start_analysis,{
+    updateTabsetPanel(session, "vigie_nature_analyse",
+                      selected = "question")
+  })
+
+  # navigation from landing pages to others
   observeEvent(input$import_nav_import,{
     updateTabsetPanel(session, "vigie_nature_analyse",
                       selected = "import")
