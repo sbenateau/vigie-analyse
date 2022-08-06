@@ -9,6 +9,7 @@
 #' @importFrom shiny NS tagList
 #' @import kableExtra
 #' @import shinydashboardPlus
+#' @import blastula
 mod_history_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -143,12 +144,7 @@ border-top-color:#ffc455;
                    tagList(
                      tabsetPanel(
                        tabPanel("Graphique",
-
-                                renderPlot({
-                                  history_datasets[[history_names[index_current_step]]][["graphique"]]
-                                })
-
-
+                                add_ggplot(history_datasets[[history_names[index_current_step]]][["graph"]], width = 7)
                        ),
                        tabPanel("Paramètres utilisés",
                                 helpText("Voici les paramètres que vous avez utilisés :"),
