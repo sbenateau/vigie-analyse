@@ -90,8 +90,10 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
     observeEvent(input$valid_graph, {
       cat("  validate result and return from tool\n")
       # record values
-      to_return$graphique  <- rv$tool_result
+      to_return$graph  <- rv$tool_result
       to_return$type <- "graph"
+      to_return$type_precise <- "Visualisation de données"
+      to_return$tool_name <- "Faire un graphique"
       to_return$parameters <- list() # to do : add parameters for report
       to_return$parameters_text <- paste("Vous avez fait un joli graphique")
 
@@ -103,8 +105,8 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
       # go to next step UI
       updateTabsetPanel(session = main_session, "vigie_nature_analyse",
                         selected = "visu_landing")
-
-      step_nb_react(step_nb_react()+1)
+      # increment step
+      step_nb_react(step_nb_react() + 1)
     })
 
   })
