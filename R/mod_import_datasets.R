@@ -13,7 +13,6 @@ mod_import_datasets_ui <- function(id){
     br(),
     h2("Etape 2 : Importation des données"),
     br(),
-    fileInput("file_upload", "Importer votre propre jeu de données"),
     selectInput(ns("available_datasets"), "Sélectionner le jeu de données à importer", c("Biolit", "Sauvages de ma Rue")),
     actionButton(ns("validate_dataset"), "Valider le jeu de données",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
@@ -51,29 +50,7 @@ mod_import_datasets_server <- function(id, analysis_history, step_nb_react, pare
       })
     })
 
-    observeEvent(input$file_upload, {
-      cat("02_validate import\n")
-      # record values
-      to_return$type <- "dataset"
-      to_return$type_precise <- "Importation de données"
-      to_return$tool_name <- "importer votre jeu de données"
-      to_return$parameters <- list() # to do : add parameters for report
-      to_return$protocole <- "inconnu"
-      to_return$dataset <- input$file_upload
-      to_return$parameters_text <- paste("Importation d'un jeu de données personnel")
 
-
-      # store into reactive value
-      analysis_history[[paste0("step_",step_nb_react())]] <- to_return
-      mod_history_server("question", analysis_history, step_nb_react())
-
-
-      # go to next step UI
-      updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
-                        selected = "import_landing")
-
-      step_nb_react(step_nb_react()+1)
-    })
 
     observeEvent(input$validate_dataset,{
       cat("02_validate import\n")
@@ -87,7 +64,7 @@ mod_import_datasets_server <- function(id, analysis_history, step_nb_react, pare
 
 
       # store into reactive value
-      analysis_history[[paste0("step_",step_nb_react())]] <- to_return
+      analysis_history[[paste0("step_", step_nb_react())]] <- to_return
       mod_history_server("question", analysis_history, step_nb_react())
 
 

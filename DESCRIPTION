@@ -8,10 +8,14 @@ Description: An application allowing participants to analyse the data they
     École.
 License: MIT + file LICENSE
 Imports: 
+    blastula,
     config (>= 0.3.1),
+    data.table,
+    dplyr,
+    ggplot2,
     golem (>= 0.3.3),
     kableExtra,
-    pkgload,
+    rmarkdown,
     shiny (>= 1.7.1),
     shinydashboardPlus,
     shinyjs,

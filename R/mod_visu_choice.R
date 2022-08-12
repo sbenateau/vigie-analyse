@@ -14,7 +14,7 @@ mod_visu_choice_ui <- function(id){
     h2("Etape 4 : Visualisation des données"),
     br(),
     selectInput(ns("select_tool"), "Sélectionner un outil de visualisation de données", c("votre sélection", "Graphique", "Carte")),
-    uiOutput(ns("module_visu_ui"))
+    actionButton("remove_all", "Remove all")
   )
 }
 
@@ -24,21 +24,28 @@ mod_visu_choice_ui <- function(id){
 mod_visu_choice_server <- function(id, analysis_history, step_nb_react, parent_session){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    out_ui_visu <- reactiveVal()
 
-    output$module_visu_ui <- renderUI({
-      req(isTruthy(out_ui_visu))
-      out_ui_visu()
+    observeEvent(input$remove_all, {
+      # remove all other ui
+      removeUI('div:has(> #graphiqu)', immediate = TRUE)
+
     })
 
     observeEvent(input$select_tool, {
       if (input$select_tool == "Graphique"){
-        print("use graph")
-        out_ui_visu(mod_visu_graphique_ui(ns("graphique")))
-        mod_visu_graphique_server("graphique", analysis_history, step_nb_react,
+        # insert ui
+        insertUI(selector = "#visu_tool",
+                 where = "afterEnd",
+                 ui = mod_visu_graphique_ui(ns("graphique")),
+                 immediate = TRUE
+        )
+
+        # run server part
+        mod_visu_graphique_server("graphique",
+                                  analysis_history,
+                                  step_nb_react,
                                   parent_session = session,
                                   main_session = parent_session)
-
       }
     })
 
