@@ -32,7 +32,7 @@ app_ui <- function(request) {
                                    style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"
                                  )
                           )
-                 ),
+                 ), # end tab start
                  # question page
                  tabPanel(title = "Question de recherche", value = "question",
 
@@ -40,34 +40,40 @@ app_ui <- function(request) {
                                  br(),
                                  mod_question_ui("question")
                           )
-                 ),
+                 ), # end tab question
                  # import page
-                 tabPanel("Importation des données", value = "import",
-                          column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
-                                 rep_br(1),
-                                 mod_import_datasets_ui("import_dataset")
-                          )
-                 ),
-                 tabPanel("Landing importation des données", value = "import_landing",
-                          column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
-                                 rep_br(1),
-                                 p("Votre jeu de données a bien été importé. Il est disponible dans votre historique en dessous de ce paragraphe"),
-                                 p("Vous pouvez continuer en important un nouveau jeu de donnée, en manipulant les données ou en les visualisant"),
-                                 actionButton("import_nav_import", "Importer un nouveau jeu de données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                                 actionButton("manip_nav_import", "Manipuler les données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                                 actionButton("visu_nav_import", "Visualiser les données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                          )
+                 navbarMenu("Importation des données",
+                            tabPanel("Importation des données", value = "import",
+                                     column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            mod_import_choice_ui("import_choice")
+                                     )
+                            ),
+                            tabPanel("votre fichier", value = "import_own_file",
+                                     column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            mod_import_own_file_ui("import_own_file")
+                                     )
+                            ),
+                            tabPanel("Landing importation des données", value = "import_landing",
+                                     column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            p("Votre jeu de données a bien été importé. Il est disponible dans votre historique en dessous de ce paragraphe"),
+                                            p("Vous pouvez continuer en important un nouveau jeu de donnée, en manipulant les données ou en les visualisant"),
+                                            actionButton("import_nav_import", "Importer un nouveau jeu de données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                            actionButton("manip_nav_import", "Manipuler les données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                            actionButton("visu_nav_import", "Visualiser les données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                     )
+                            )
                  ),
                  # data wrangling page
                  tabPanel("Manipulation des données", value = "manip",
 
                           column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                  rep_br(1),
-                                 mod_manip_choice_ui("manip_dataset"),
-                                 div(id="manip_tool")
+                                 mod_manip_choice_ui("manip_dataset")
                           )
                  ),
                  tabPanel("Landing manipulation des données", value = "manip_landing",
