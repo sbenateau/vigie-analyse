@@ -69,9 +69,7 @@ border-top-color:#ffc455;
                                          HTML(
                                            kbl(head(history_datasets[[history_names[index_current_step]]][["dataset"]])) %>%
                                              kable_paper() %>%
-                                             kable_styling(bootstrap_options = c("striped", "hover")) %>%
-                                             row_spec(1, bold = T, color = "white", background = "grey")%>%
-                                             add_indent(c(2:5))
+                                             kable_styling(bootstrap_options = c("striped", "hover"))
 
                                          )
                                 )
