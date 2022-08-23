@@ -33,7 +33,7 @@ mod_report_server <- function(id, analysis_history){
         file.copy("R/report.Rmd", tempReport, overwrite = TRUE)
 
         # Set up parameters to pass to Rmd document
-        params <- list(analysis_history = analysis_history)
+        params <- list(analysis_history = reactiveValuesToList(analysis_history))
 
         # Knit the document, passing in the `params` list, and eval it in a
         # child of the global environment (this isolates the code in the document
