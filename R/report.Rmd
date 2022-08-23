@@ -10,7 +10,9 @@ params:
   analysis_history: NA
 ---
 
+
 ```{r, results='asis', echo=FALSE}
+
 
 for (i in 1:length(params$analysis_history)){
   current_step <- params$analysis_history[[paste0("step_",i)]]
