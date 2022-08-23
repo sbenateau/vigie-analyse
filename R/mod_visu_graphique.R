@@ -100,7 +100,7 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
 
       # store into reactive value
       analysis_history[[paste0("step_", step_nb_react())]] <- to_return
-      mod_history_server("question", analysis_history, step_nb_react())
+      mod_history_server("graph", analysis_history, step_nb_react())
 
       # go to next step UI
       updateTabsetPanel(session = main_session, "vigie_nature_analyse",
