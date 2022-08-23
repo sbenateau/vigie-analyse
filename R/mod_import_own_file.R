@@ -36,6 +36,7 @@ mod_import_own_file_server <- function(id, analysis_history, step_nb_react, pare
     observeEvent(input$file_upload,{
       dataset_uploaded <- fread(input$file_upload$datapath)
       data.table::setDF(dataset_uploaded)
+      names(dataset_uploaded) <- gsub(" ", "_", names(dataset_uploaded))
       to_return$dataset <- dataset_uploaded
     })
 
