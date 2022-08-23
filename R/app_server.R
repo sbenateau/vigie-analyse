@@ -28,12 +28,13 @@ app_server <- function(input, output, session) {
   mod_question_server("question", analysis_history, step_nb_react, parent_session = session)
 
   # module to import dataset
-  mod_import_datasets_server("import_dataset", analysis_history, step_nb_react, parent_session = session)
-  mod_import_choice_server("import_choice", parent_session = session)
+  #mod_import_datasets_server("import_dataset", analysis_history, step_nb_react, parent_session = session)
+  mod_import_choice_server("import_choice", analysis_history, step_nb_react, parent_session = session)
   mod_import_own_file_server("import_own_file", analysis_history, step_nb_react, parent_session = session)
 
   # module to choose between the different tools
   mod_manip_choice_server("manip_dataset", analysis_history, step_nb_react, parent_session = session)
+  mod_manip_group_by_server("manip_group_by", analysis_history, step_nb_react, parent_session = session)
 
   # module to choose betwen visualisation
   mod_visu_choice_server("visu_dataset", analysis_history, step_nb_react, parent_session = session)
