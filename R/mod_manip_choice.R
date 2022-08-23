@@ -13,11 +13,19 @@ mod_manip_choice_ui <- function(id){
     br(),
     h2("Etape 3 : Manipulation des données"),
     br(),
-    selectInput(ns("select_tool"),
-                "Sélectionner un outil de manipulation de données",
-                c("votre sélection", "Regrouper des lignes", "Sélectionner des lignes", "other")
-    ),
-    div(id = "manip_tool")
+    p("Vous disposez de quatre familles d'outils pour manipuler vos données. N'hésitez pas à consulter l'aide pour apprendre à utiliser les outils."),
+    h3("Regrouper des lignes"),
+    p("Cet outil permet de regrouper des lignes par catégorie (par type d'environnement par exemple) en faisant un calcul (une moyenne par exemple) sur les données d'une autre colonne."),
+    bsCollapse(id = "collapse_group_tool",
+               multiple = TRUE,
+               bsCollapsePanel("Découvrir ou utiliser cet outil",
+                               fluidRow(img(src = "http://galaxybricks.vigienature-ecole.fr/media/edito/2020/04/01/resumer.gif", align = "center", width="50%")),
+                               p("Cet outil permet de regrouper des lignes par catégorie (par type d'environnement par exemple) en faisant un calcul (une moyenne par exemple) sur les données d'une autre colonne."),
+                               actionButton(ns("manip_tool_group_by"), "Utiliser cet outil",
+                                            style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%")
+               )
+    )
+
   )
 }
 
@@ -28,28 +36,10 @@ mod_manip_choice_server <- function(id, analysis_history, step_nb_react, parent_
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    observeEvent(input$select_tool, {
-      if (input$select_tool == "Sélectionner des lignes"){
-        insertUI(selector = "#manip_tool",
-                 where = "afterEnd",
-                 ui = mod_filter_ui(ns("filter")),
-                 immediate = TRUE
-        )
-        mod_filter_server("filter", analysis_history, step_nb_react,
-                          parent_session = session,
-                          main_session = parent_session)
-
-      } else if (input$select_tool == "Regrouper des lignes"){
-        insertUI(selector = "#manip_tool",
-                 where = "afterEnd",
-                 ui = mod_manip_group_by_ui(ns("group_by")),
-                 immediate = TRUE
-        )
-        mod_manip_group_by_server("group_by", analysis_history, step_nb_react,
-                                  parent_session = session,
-                                  main_session = parent_session)
-
-      }
+    observeEvent(input$manip_tool_group_by, {
+      # go to next step UI
+      updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
+                        selected = "manip_group_by")
     })
 
 
