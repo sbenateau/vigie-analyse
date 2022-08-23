@@ -19,6 +19,11 @@ h2 {
   background:#ffc455;
 }
 
+.box.box-solid.box-primary>.box-header>.label.label-primary {
+  color:#fff;
+  background:#ffaaaa;
+}
+
 .box.box-solid.box-primary{
 border-bottom-color:#666666;
 border-left-color:#666666;
@@ -36,4 +41,13 @@ border-top-color:#666666;
   border-color: #037971;
   font-size:120%
 
+}
+
+/*collapse panel settings */
+.panel-group .panel-heading {
+  background-color:#ffc455;
+}
+
+.panel-group .panel-heading {
+  border-radius:0px;
 }
