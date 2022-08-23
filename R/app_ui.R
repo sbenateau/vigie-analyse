@@ -69,25 +69,33 @@ app_ui <- function(request) {
                             )
                  ),
                  # data wrangling page
-                 tabPanel("Manipulation des données", value = "manip",
+                 navbarMenu("Manipulation des données",
+                            tabPanel("Manipulation des données", value = "manip",
 
-                          column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
-                                 rep_br(1),
-                                 mod_manip_choice_ui("manip_dataset")
-                          )
-                 ),
-                 tabPanel("Landing manipulation des données", value = "manip_landing",
-                          column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
-                                 rep_br(1),
-                                 p("Votre calcul a bien été effectué. Le jeu de données calculé est disponible dans votre historique en dessous de ce paragraphe"),
-                                 p("Vous pouvez continuer en important un nouveau jeu de donnée, en manipulant les données ou en les visualisant"),
-                                 actionButton("import_nav_manip", "Importer un nouveau jeu de données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                                 actionButton("manip_nav_manip", "Manipuler les données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                                 actionButton("visu_nav_manip", "Visualiser les données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                          )
+                                     column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            mod_manip_choice_ui("manip_dataset")
+                                     )
+                            ),
+                            tabPanel("Résumer des données", value = "manip_group_by",
+                                     column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            mod_manip_group_by_ui("manip_group_by")
+                                     )
+                            ),
+                            tabPanel("Landing manipulation des données", value = "manip_landing",
+                                     column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            p("Votre calcul a bien été effectué. Le jeu de données calculé est disponible dans votre historique en dessous de ce paragraphe"),
+                                            p("Vous pouvez continuer en important un nouveau jeu de donnée, en manipulant les données ou en les visualisant"),
+                                            actionButton("import_nav_manip", "Importer un nouveau jeu de données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                            actionButton("manip_nav_manip", "Manipuler les données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                            actionButton("visu_nav_manip", "Visualiser les données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                     )
+                            )
                  ),
                  # data visualisation page
                  tabPanel("Visualisation des données", value = "visu",
