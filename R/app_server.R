@@ -35,9 +35,11 @@ app_server <- function(input, output, session) {
   # module to choose between the different tools
   mod_manip_choice_server("manip_dataset", analysis_history, step_nb_react, parent_session = session)
   mod_manip_group_by_server("manip_group_by", analysis_history, step_nb_react, parent_session = session)
+  mod_filter_server("manip_filter", analysis_history, step_nb_react, parent_session = session)
 
   # module to choose betwen visualisation
   mod_visu_choice_server("visu_dataset", analysis_history, step_nb_react, parent_session = session)
+  mod_visu_graphique_server("visu_graph", analysis_history, step_nb_react, parent_session = session)
 
   # module to download the report
   mod_report_server("report", analysis_history)
