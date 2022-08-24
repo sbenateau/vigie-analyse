@@ -10,7 +10,7 @@
 mod_filter_ui <- function(id){
   ns <- NS(id)
   tagList(
-    useShinyjs(),
+    actionButton(ns("launch_tool"), label = "lancer l'outil (remplacer par réactive)"),
     selectInput(ns("select_dataset"), label = "Garder les lignes du jeu de données", choices = NULL),
     selectInput(ns("select_column"), label = "dont les valeurs de la colonne", choices = NULL),
     textOutput(ns("help_text_column")),
@@ -28,7 +28,7 @@ mod_filter_ui <- function(id){
 #' filter Server Functions
 #'
 #' @noRd
-mod_filter_server <- function(id, analysis_history, step_nb_react, parent_session, main_session){
+mod_filter_server <- function(id, analysis_history, step_nb_react, parent_session){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
@@ -41,23 +41,23 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
 
     cat("data wrangling : Filter\n")
 
+    observeEvent(input$launch_tool,{
+      # populate select with datasets names
 
-    # populate select with datasets names
+      # filter datasets only
+      datasets_names <- names(analysis_history)
+      datasets_names_keep <- rep(TRUE, length(datasets_names))
+      if(length(datasets_names) > 1) {
 
-    # filter datasets only
-    datasets_names <- names(analysis_history)
-    datasets_names_keep <- rep(TRUE, length(datasets_names))
-    if(length(datasets_names) > 1) {
-
-      cat("  update dataset list\n")
-      for (i in seq_along(datasets_names)){
-        datasets_names_keep[i] <- ifelse(analysis_history[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
+        cat("  update dataset list\n")
+        for (i in seq_along(datasets_names)){
+          datasets_names_keep[i] <- ifelse(analysis_history[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
+        }
+        datasets_names <- datasets_names[datasets_names_keep]
+        updateSelectInput(session = parent_session,
+                          inputId = ns("select_dataset"),
+                          choices = datasets_names)
       }
-      datasets_names <- datasets_names[datasets_names_keep]
-         updateSelectInput(session = main_session,
-                           inputId = ns("select_dataset"),
-                           choices = datasets_names)
-    }
 
       # populate columns with columns names
       observeEvent(input$select_dataset, {
@@ -66,7 +66,7 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
           # allocate active dataset
           rv$active_dataset <- analysis_history[[input$select_dataset]][["dataset"]]
           active_dataset_columns <- colnames(rv$active_dataset)
-          updateSelectInput(session = main_session, inputId = ns("select_column"), choices = active_dataset_columns)
+          updateSelectInput(session = parent_session, inputId = ns("select_column"), choices = active_dataset_columns)
         }
       })
 
@@ -137,7 +137,7 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
         mod_history_server("question", analysis_history, step_nb_react())
 
         # go to next step UI
-        updateTabsetPanel(session = main_session, "vigie_nature_analyse",
+        updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
                           selected = "manip_landing")
 
         step_nb_react(step_nb_react()+1)
@@ -146,7 +146,7 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
         print(input$valid_tool)
       })
 
-
+    })
   })
 }
 

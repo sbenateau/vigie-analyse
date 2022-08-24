@@ -13,8 +13,17 @@ mod_visu_choice_ui <- function(id){
     br(),
     h2("Etape 4 : Visualisation des données"),
     br(),
-    selectInput(ns("select_tool"), "Sélectionner un outil de visualisation de données", c("votre sélection", "Graphique", "Carte")),
-    actionButton("remove_all", "Remove all")
+    h3("Graphiques"),
+    p("Il existe deux outils pour faire des graphiques, le premier traite les tableaux avec plusieurs lignes (la plupart des utilisations)."),
+    actionButton(ns("choose_graph"), "Représenter les données",
+                 style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+    br(),
+    bsCollapse(id = "collapse_graph_choice",
+               multiple = TRUE,
+               bsCollapsePanel("Afficher l'aide de l'outil",
+                               img(src = "http://galaxybricks.vigienature-ecole.fr/media/edito/2020/04/14/histrow.gif", align = "center", width="50%")
+               )
+    )
   )
 }
 
@@ -25,35 +34,11 @@ mod_visu_choice_server <- function(id, analysis_history, step_nb_react, parent_s
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    observeEvent(input$remove_all, {
-      # remove all other ui
-      removeUI('div:has(> #graphiqu)', immediate = TRUE)
-
+    observeEvent(input$choose_graph, {
+      updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
+                        selected = "visu_graph")
     })
 
-    observeEvent(input$select_tool, {
-      if (input$select_tool == "Graphique"){
-        # insert ui
-        insertUI(selector = "#visu_tool",
-                 where = "afterEnd",
-                 ui = mod_visu_graphique_ui(ns("graphique")),
-                 immediate = TRUE
-        )
-
-        # run server part
-        mod_visu_graphique_server("graphique",
-                                  analysis_history,
-                                  step_nb_react,
-                                  parent_session = session,
-                                  main_session = parent_session)
-      }
-    })
 
   })
 }
-
-## To be copied in the UI
-# mod_visu_choice_ui("visu_choice_1")
-
-## To be copied in the server
-# mod_visu_choice_server("visu_choice_1")

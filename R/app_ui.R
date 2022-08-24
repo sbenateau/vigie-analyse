@@ -83,6 +83,12 @@ app_ui <- function(request) {
                                             mod_manip_group_by_ui("manip_group_by")
                                      )
                             ),
+                            tabPanel("Sélectionner des lignes", value = "manip_filter",
+                                     column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            mod_filter_ui("manip_filter")
+                                     )
+                            ),
                             tabPanel("Landing manipulation des données", value = "manip_landing",
                                      column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                             rep_br(1),
@@ -98,26 +104,35 @@ app_ui <- function(request) {
                             )
                  ),
                  # data visualisation page
-                 tabPanel("Visualisation des données", value = "visu",
+                 navbarMenu("Visualisation des données",
+                            tabPanel("Visualisation des données", value = "visu",
 
-                          column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
-                                 rep_br(1),
-                                 mod_visu_choice_ui("visu_dataset"),
-                                 div(id="visu_tool")
-                          )
-                 ),
-                 tabPanel("Landing visualisation des données", value = "visu_landing",
-                          column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
-                                 rep_br(1),
-                                 p("Votre réprésentation a bien été effectuée. La représentation calculée est disponible dans votre historique en dessous de ce paragraphe"),
-                                 p("Vous pouvez continuer en important un nouveau jeu de donnée, en manipulant les données ou en les visualisant"),
-                                 actionButton("import_nav_visu", "Importer un nouveau jeu de données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                                 actionButton("manip_nav_visu", "Manipuler les données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                                 actionButton("visu_nav_visu", "Visualiser les données",
-                                              style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
-                          )
+                                     column(style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            mod_visu_choice_ui("visu_dataset"),
+                                            div(id="visu_tool")
+                                     ),
+
+                            ),
+                            tabPanel("Sélectionner des lignes", value = "visu_graph",
+                                     column(id = "column_visu", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            mod_visu_graphique_ui("visu_graph")
+                                     )
+                            ),
+                            tabPanel("Landing visualisation des données", value = "visu_landing",
+                                     column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            p("Votre réprésentation a bien été effectuée. La représentation calculée est disponible dans votre historique en dessous de ce paragraphe"),
+                                            p("Vous pouvez continuer en important un nouveau jeu de donnée, en manipulant les données ou en les visualisant"),
+                                            actionButton("import_nav_visu", "Importer un nouveau jeu de données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                            actionButton("manip_nav_visu", "Manipuler les données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                            actionButton("visu_nav_visu", "Visualiser les données",
+                                                         style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                     )
+                            )
                  ),
                  tabPanel("Télécharger un rapport", value = "report",
                           column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
