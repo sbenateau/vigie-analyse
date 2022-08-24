@@ -82,7 +82,7 @@ mod_manip_group_by_server <- function(id, analysis_history, step_nb_react, paren
         if (!is.null(input$select_operation)) {
           rv$function_calculation <- c()
 
-          count_sup_zero <- function(x) length(x[x>0])
+
           if ("moyenne" %in% input$select_operation) rv$function_calculation = c(rv$function_calculation, "mean")
           if ("médiane" %in% input$select_operation) rv$function_calculation = c(rv$function_calculation, "median")
           if ("somme" %in% input$select_operation) rv$function_calculation = c(rv$function_calculation, "sum")
