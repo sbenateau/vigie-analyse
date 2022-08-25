@@ -33,6 +33,7 @@ golem::add_module(name = "visu_graphique", with_test = TRUE) # Name of the modul
 golem::add_module(name = "nav_manip", with_test = TRUE) # Name of the module
 golem::add_module(name = "report", with_test = TRUE) # Name of the module
 golem::add_module(name = "import_own_file", with_test = TRUE) # Name of the module
+golem::add_module(name = "manip_join_datasets", with_test = TRUE) # Name of the module
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*
