@@ -129,7 +129,14 @@ mod_filter_server <- function(id, analysis_history, step_nb_react, parent_sessio
         to_return$type_precise <- "Manipulation de données"
         to_return$tool_name <- "Sélectionner des lignes"
         to_return$parameters <- list() # to do : add parameters for report
-        to_return$parameters_text <- paste("Vous avez filtré le jeu de données")
+        to_return$parameters_text <- paste("Vous avez gardé les lignes du jeu de données",
+                                           input$select_dataset,
+                                           "dont les valeurs de la colonne",
+                                           input$select_column,
+                                           "sont",
+                                           input$select_type,
+                                           "à la valeur suivante :",
+                                           input$filter_pattern)
 
 
         # store into reactive value

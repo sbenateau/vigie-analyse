@@ -13,10 +13,10 @@ mod_manip_group_by_ui <- function(id){
   tagList(
     actionButton(ns("launch_tool"), label = "lancer l'outil (remplacer par réactive)"),
     selectInput(ns("select_dataset"), label = "Regrouper toutes les lignes du jeu de données", choices = NULL),
-    selectInput(ns("select_columns_group"), label = "selon des catégories contenues dans la ou les colonnes suivantes", choices = NULL, multiple = TRUE),
+    selectInput(ns("select_columns_group"), label = "selon les catégories contenues dans la ou les colonnes suivantes", choices = NULL, multiple = TRUE),
     # textOutput(ns("help_text_column")), # preciser par exemple attention si une valeur quanti
     selectInput(ns("select_operation"), label = "en faisant la ou les opération suivante", choices = c("moyenne", "médiane", "somme", "compte", "compte des valeurs supérieures à zéro", "écart-type", "erreur standard"), multiple = TRUE),
-    selectInput(ns("select_column_operation"), label = " sur la colonne", choices = NULL, multiple = FALSE), # TO DO : remove if count
+    selectInput(ns("select_column_operation"), label = "sur la colonne", choices = NULL, multiple = FALSE), # TO DO : remove if count
     textOutput(ns("error")),
     actionButton(ns("valid_tool"), label = "Valider le résultat",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
@@ -142,7 +142,14 @@ mod_manip_group_by_server <- function(id, analysis_history, step_nb_react, paren
           to_return$type_precise <- "Manipulation de données"
           to_return$tool_name <- "Résumer les données"
           to_return$parameters <- list() # to do : add parameters for report
-          to_return$parameters_text <- paste("Vous avez résumé le jeu de données")
+          to_return$parameters_text <- paste("Vous avez regroupé toutes les lignes du jeu de données :",
+                                             input$select_dataset,
+                                             "selon les catégories contenues dans la ou les colonnes :",
+                                             input$select_columns_group,
+                                             "en faisant la ou les opération suivantes :",
+                                             input$select_operation,
+                                             "sur la colonne :",
+                                             input$select_column_operation)
 
 
           # store into reactive value
