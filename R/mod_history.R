@@ -31,24 +31,9 @@ mod_history_server <- function(id, history_datasets, step_nb){
 
     # add history step box according to data type
     if (history_datasets[[history_names[index_current_step]]][["type"]] == "dataset"){
-
       insertUI(selector = "#history_reference", where = "afterEnd",
                tagList(
-                 tags$style(HTML("
-.box.box-solid.box-primary>.box-header {
-  color:#fff;
-  background:#ffc455;
-}
-
-.box.box-solid.box-primary{
-border-bottom-color:#ffc455;
-border-left-color:#666666;
-border-right-color:#666666;
-border-top-color:#ffc455;
-}")),
                  br(), br(),
-
-
                  box(
                    title = p(dashboardLabel(paste("Étape", step_nb), status = "primary"), "Jeu de données"),
                    id = paste0("history_", step_nb),
@@ -74,7 +59,6 @@ border-top-color:#ffc455;
                                          )
                                 )
 
-
                        ),
                        tabPanel("Paramètres utilisés",
                                 helpText("Voici les paramètres que vous avez utilisés :"),
@@ -89,10 +73,9 @@ border-top-color:#ffc455;
       insertUI(selector = "#history_reference", where = "afterEnd",
                tagList(
                  br(), br(),
-
-
                  box(
-                   title = p(dashboardLabel(paste("Étape", step_nb), status = "primary"), "Question de recherche"),
+                   title = p(img(src = "http://galaxybricks.vigienature-ecole.fr/static/images/interface/Visualiser.png", height = "30px"),
+                                 paste("Étape", step_nb, ":"), "Question de recherche"),
                    id = paste0("history_", step_nb),
                    closable = FALSE,
                    width = 12,
@@ -105,28 +88,11 @@ border-top-color:#ffc455;
                    )
                  )
                )
-
       )
-
     } else if (history_datasets[[history_names[index_current_step]]][["type"]] == "graph"){
-
       insertUI(selector = "#history_reference", where = "afterEnd",
                tagList(
-                 tags$style(HTML("
-.box.box-solid.box-primary>.box-header {
-  color:#fff;
-  background:#ffc455;
-}
-
-.box.box-solid.box-primary{
-border-bottom-color:#ffc455;
-border-left-color:#666666;
-border-right-color:#666666;
-border-top-color:#ffc455;
-}")),
                  br(), br(),
-
-
                  box(
                    title = p(dashboardLabel(paste("Étape", step_nb), status = "primary"), "Graphique"),
                    id = paste0("history_", step_nb),
@@ -154,8 +120,6 @@ border-top-color:#ffc455;
                )
       )
     }
-
-
   })
 
   if (step_nb > 1){
