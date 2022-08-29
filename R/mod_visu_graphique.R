@@ -8,6 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 #' @import ggplot2
+#' @import shinyBS
 mod_visu_graphique_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -16,6 +17,11 @@ mod_visu_graphique_ui <- function(id){
     selectInput(ns("select_column_x"), label = "Axe des ordonnées (X)", choices = NULL),
     selectInput(ns("select_column_y"), label = "Axe des ordonnées (Y)", choices = NULL),
     selectInput(ns("select_type"), label = "Type de graphique", choices = c("points", "lignes")),
+    bsCollapse(id = "advanced_option",
+               bsCollapsePanel("Options avancées",
+                               textInput(ns("x_label"), "Donner un nom personalisé à l'axe des x"),
+                               textInput(ns("y_label"), "Donner un nom personalisé à l'axe des y")
+               )),
     actionButton(ns("valid_graph"), label = "Valider le graphique",
                  style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
     helpText("Prévisualisation du graphique"),
@@ -72,7 +78,16 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
         }
       })
 
-      observe({
+      toListen <- reactive({
+        list(input$select_column_x,
+             input$select_column_y,
+             input$select_type,
+             input$select_dataset,
+             input$y_label,
+             input$x_label)
+      })
+
+      observeEvent(toListen(), {
         if(!(is.null(input$select_column_x) & is.null(input$select_column_y))) {
           if(input$select_column_x != "" & input$select_column_y != "") {
 
@@ -87,7 +102,7 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
 
             if(input$select_type == "lignes") {
               print("lignes")
-              rv$tool_result <- rv$tool_result + geom_ligne()
+              rv$tool_result <- rv$tool_result + geom_line()
             }
 
             if(input$select_type == "barres") {
@@ -95,7 +110,13 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
               rv$tool_result <- rv$tool_result + geom_col()
             }
 
+            if(input$x_label != "") {
+              rv$tool_result = rv$tool_result + xlab(input$x_label)
+            }
 
+            if(input$y_label != "") {
+              rv$tool_result = rv$tool_result + ylab(input$y_label)
+            }
           }
         }
       })
