@@ -60,6 +60,18 @@ mod_import_choice_ui <- function(id){
                                         rep_br(2)
                                  )
                                )
+               ),
+               bsCollapsePanel("Importer des données complémentaires",
+                               tagList(
+                                 column(6,
+                                        h3("Importer des données pour analyser les résultats Vigie-Chiro"),
+                                        br(),
+                                        p("Ce fichier contient les correspondances entre les codes taxons et les espèces suivies dans le cadre de Vigie-Chiro. Pour faire la correspondance avec les deux fichiers, il faut utiliser l'outil de manipulation de données : joindre deux fichiers en fonction d'une colonne"),
+                                        actionButton(ns("import_chiro_specie_list"), "Importer le fichier de données complémentaires Vigie-Chiro",
+                                                     style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%"),
+                                        rep_br(2)
+                                 )
+                               )
                )
     )
   )
@@ -94,7 +106,7 @@ mod_import_choice_server <- function(id, analysis_history, step_nb_react, parent
 
       # store into reactive value
       analysis_history[[paste0("step_", step_nb_react())]] <- to_return
-      mod_history_server("question", analysis_history, step_nb_react())
+      mod_history_server("import", analysis_history, step_nb_react())
 
 
       # go to next step UI
@@ -104,6 +116,33 @@ mod_import_choice_server <- function(id, analysis_history, step_nb_react, parent
       cat("increment step_nb_react")
       step_nb_react(step_nb_react()+1)
     })
+
+    observeEvent(input$import_chiro_specie_list, {
+      cat("02_validate import\n")
+      # record values
+      to_return$type <- "dataset"
+      to_return$type_precise <- "Importation de données"
+      to_return$tool_name <- "importer le fichier Vigie-Chiro pour la correspondance des espèces"
+      to_return$parameters <- list() # to do : add parameters for report
+      to_return$protocole <- input$available_datasets
+      to_return$parameters_text <- paste("Importation du jeu de données Vigie-Chiro pour la correspondance des espèces")
+
+      to_return$dataset <- read.csv(paste0("../../datasets/bricks/SpeciesList.csv"))
+
+
+      # store into reactive value
+      analysis_history[[paste0("step_", step_nb_react())]] <- to_return
+      mod_history_server("import", analysis_history, step_nb_react())
+
+
+      # go to next step UI
+      updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
+                        selected = "import_landing")
+
+      cat("increment step_nb_react")
+      step_nb_react(step_nb_react()+1)
+    })
+
 
     # navigation vers les pages d'importation des données
     observeEvent(input$import_own_file, {
