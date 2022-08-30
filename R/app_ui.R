@@ -120,7 +120,7 @@ app_ui <- function(request) {
                                      ),
 
                             ),
-                            tabPanel("Sélectionner des lignes", value = "visu_graph",
+                            tabPanel("Réaliser un graphique", value = "visu_graph",
                                      column(id = "column_visu", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                             rep_br(1),
                                             mod_visu_graphique_ui("visu_graph")
