@@ -90,16 +90,15 @@ mod_import_choice_server <- function(id, analysis_history, step_nb_react, parent
                                 protocole = NULL,
                                 parameters_text = NULL)
 
-    # navigation vers les pages d'importation des données
+    # Importation directe des jeux de données
     observeEvent(input$import_vne_birds, {
-      cat("02_validate import\n")
       # record values
       to_return$type <- "dataset"
       to_return$type_precise <- "Importation de données"
       to_return$tool_name <- "importer des données Vigie-Nature École"
       to_return$parameters <- list() # to do : add parameters for report
-      to_return$protocole <- input$available_datasets
-      to_return$parameters_text <- paste("Importation du jeu de données issu du protocole :", input$available_datasets)
+      to_return$protocole <- "Oiseaux des jardins"
+      to_return$parameters_text <- paste("Importation du jeu de données issu du protocole :  Oiseaux des jardins")
 
       to_return$dataset <- read.csv(paste0("../../datasets/bricks/oiseaux.csv"))
 
@@ -117,18 +116,41 @@ mod_import_choice_server <- function(id, analysis_history, step_nb_react, parent
       step_nb_react(step_nb_react()+1)
     })
 
+    # Importation directe des jeux de données
+    observeEvent(input$import_vn_birds, {
+      # record values
+      to_return$type <- "dataset"
+      to_return$type_precise <- "Importation de données"
+      to_return$tool_name <- "importer des données Vigie-Nature École et Vigie-Nature"
+      to_return$parameters <- list() # to do : add parameters for report
+      to_return$protocole <- "Oiseaux des jardins"
+      to_return$parameters_text <- paste("Importation du jeu de données issu du protocole : Oiseaux des jardins")
+
+      to_return$dataset <- read.csv(paste0("../../datasets/bricks/oiseaux_odj.csv"))
+
+
+      # store into reactive value
+      analysis_history[[paste0("step_", step_nb_react())]] <- to_return
+      mod_history_server("import", analysis_history, step_nb_react())
+
+
+      # go to next step UI
+      updateTabsetPanel(session = parent_session, "vigie_nature_analyse",
+                        selected = "import_landing")
+
+      cat("increment step_nb_react")
+      step_nb_react(step_nb_react()+1)
+    })
+
     observeEvent(input$import_chiro_specie_list, {
-      cat("02_validate import\n")
       # record values
       to_return$type <- "dataset"
       to_return$type_precise <- "Importation de données"
       to_return$tool_name <- "importer le fichier Vigie-Chiro pour la correspondance des espèces"
       to_return$parameters <- list() # to do : add parameters for report
-      to_return$protocole <- input$available_datasets
+      to_return$protocole <- "Vigie-Chiro"
       to_return$parameters_text <- paste("Importation du jeu de données Vigie-Chiro pour la correspondance des espèces")
-
       to_return$dataset <- read.csv(paste0("../../datasets/bricks/SpeciesList.csv"))
-
 
       # store into reactive value
       analysis_history[[paste0("step_", step_nb_react())]] <- to_return
