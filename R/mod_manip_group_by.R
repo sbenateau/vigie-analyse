@@ -49,21 +49,8 @@ mod_manip_group_by_server <- function(id, analysis_history, step_nb_react, paren
 
       # populate select with datasets names
 
-      # filter datasets only
-
-      datasets_names <- names(analysis_history)
-      datasets_names_keep <- rep(TRUE, length(datasets_names))
-      if(length(datasets_names) > 1) {
-
-        cat("  update dataset list\n")
-        for (i in seq_along(datasets_names)){
-          datasets_names_keep[i] <- ifelse(analysis_history[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
-        }
-        datasets_names <- datasets_names[datasets_names_keep]
-        updateSelectInput(session = parent_session,
-                          inputId = ns("select_dataset"),
-                          choices = datasets_names)
-      }
+      # filter datasets only and update the select input list
+      filter_and_update_datasets(analysis_history, "select_dataset", parent_session, ns)
 
       # populate columns with columns names
       observeEvent(input$select_dataset, {
@@ -145,11 +132,13 @@ mod_manip_group_by_server <- function(id, analysis_history, step_nb_react, paren
           to_return$parameters_text <- paste("Vous avez regroupé toutes les lignes du jeu de données :",
                                              input$select_dataset,
                                              "selon les catégories contenues dans la ou les colonnes :",
-                                             input$select_columns_group,
-                                             "en faisant la ou les opération suivantes :",
-                                             input$select_operation,
+                                             paste(input$select_columns_group, collapse = " "),
+                                             "en faisant la ou les opérations suivantes :",
+                                             paste(input$select_operation, collapse = " "),
                                              "sur la colonne :",
                                              input$select_column_operation)
+
+          print(to_return$parameters_text)
 
 
           # store into reactive value

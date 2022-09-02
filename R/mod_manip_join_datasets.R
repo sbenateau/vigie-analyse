@@ -48,25 +48,8 @@ mod_manip_join_datasets_server <- function(id, analysis_history, step_nb_react, 
 
       # populate select with datasets names
 
-      # filter datasets only
-      datasets_names <- names(analysis_history)
-      datasets_names_keep <- rep(TRUE, length(datasets_names))
-      if(length(datasets_names) > 1) {
-
-        cat("  update dataset list\n")
-        for (i in seq_along(datasets_names)){
-          datasets_names_keep[i] <- ifelse(analysis_history[[datasets_names[i]]][["type"]] != "dataset", FALSE, TRUE)
-        }
-        datasets_names <- datasets_names[datasets_names_keep]
-        updateSelectInput(session = parent_session,
-                          inputId = ns("select_dataset_1"),
-                          choices = datasets_names)
-        updateSelectInput(session = parent_session,
-                          inputId = ns("select_dataset_2"),
-                          choices = datasets_names)
-      }
-
-
+      # filter datasets only and update the select input list
+      filter_and_update_datasets(analysis_history, c("select_dataset_1", "select_dataset_2"), parent_session, ns)
 
       # populate columns with columns names
       observeEvent(input$select_dataset_1, {
