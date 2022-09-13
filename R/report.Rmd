@@ -11,7 +11,7 @@ params:
 ---
 
 
-```{r, results='asis', echo=FALSE}
+```{r, results='asis', echo=FALSE, message=FALSE, warning=FALSE}
 
 
 for (i in 1:length(params$analysis_history)){

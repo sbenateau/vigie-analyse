@@ -95,6 +95,15 @@ app_ui <- function(request) {
                                             mod_manip_join_datasets_ui("manip_join")
                                      )
                             ),
+
+                            tabPanel("Opération sur des colonnes", value = "manip_col_operation",
+                                     column(id = "column_manip", style='min-height:500px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
+                                            rep_br(1),
+                                            mod_manip_columns_operation_ui("manip_col_operation")
+                                     )
+                            ),
+
+
                             tabPanel("Landing manipulation des données", value = "manip_landing",
                                      column(style='min-height:200px; border: 10px; background: #FFFFFF', width = 10, offset = 1, align="left",
                                             rep_br(1),

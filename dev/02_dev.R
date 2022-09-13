@@ -34,6 +34,9 @@ golem::add_module(name = "nav_manip", with_test = TRUE) # Name of the module
 golem::add_module(name = "report", with_test = TRUE) # Name of the module
 golem::add_module(name = "import_own_file", with_test = TRUE) # Name of the module
 golem::add_module(name = "manip_join_datasets", with_test = TRUE) # Name of the module
+golem::add_module(name = "manip_columns_operation", with_test = TRUE) # Name of the module
+
+addResourcePath( 'img', system.file('app/img', package = 'golem') )
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*

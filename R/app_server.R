@@ -2,13 +2,12 @@
 #'
 #' @param input,output,session Internal parameters for {shiny}.
 #' @import shiny
-#' @import digest
 #' @noRd
 #'
 app_server <- function(input, output, session) {
 
   # increase max dowload size for manual import
-  options(shiny.maxRequestSize=60*1024^2)
+  options(shiny.maxRequestSize=200*1024^2)
 
   # define values
 
