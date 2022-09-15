@@ -7,7 +7,6 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#' @import shinyBS
 mod_import_choice_ui <- function(id){
   ns <- NS(id)
   tagList(
