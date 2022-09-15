@@ -7,7 +7,6 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#' @import dplyr
 mod_manip_join_datasets_ui <- function(id){
   ns <- NS(id)
   tagList(

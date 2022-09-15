@@ -7,7 +7,6 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#' @importFrom data.table fread
 mod_import_own_file_ui <- function(id){
   ns <- NS(id)
   tagList(
