@@ -68,13 +68,13 @@ count_sup_zero <- function(x) length(x[x>0])
 
 #' filter dataset from analysis report and update the select input
 #'
-#' @param analysis_history
-#' @param input_to_update
+#' @param analysis_history reactive values containing all information about the objects and objects themself
+#' @param input_to_update vector of the input to update
 #'
-#' @return
 #' @export
 #'
 #' @examples
+#' filter_and_update_datasets()
 filter_and_update_datasets <- function(analysis_history, input_to_update, session, ns){
   datasets_names <- names(analysis_history)
   datasets_names_keep <- rep(TRUE, length(datasets_names))
