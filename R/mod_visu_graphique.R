@@ -1,8 +1,12 @@
 #' visu_graphique UI Function
 #'
-#' @description A shiny Module.
+#' @description A shiny Module to visualise data as a graph
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
+#' @param analysis_history an object that contain all the information from the analysis (datasets and information)
+#' @param step_nb_react the current step number
+#' @param parent_session the parent session internal parameters for {shiny}
+#'
 #'
 #' @noRd
 #'

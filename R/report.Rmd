@@ -13,10 +13,12 @@ params:
 
 ```{r, results='asis', echo=FALSE, message=FALSE, warning=FALSE}
 
-
+# loop around the analysis_history object to print its information content
 for (i in 1:length(params$analysis_history)){
+  # extract current step information
   current_step <- params$analysis_history[[paste0("step_",i)]]
   
+  # if question print only the question text
   if (current_step$type == "question"){
   
   cat("# Question de recherche\n")
