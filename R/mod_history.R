@@ -7,6 +7,9 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @import kableExtra
+#' @import shinydashboardPlus
+#' @import blastula
 mod_history_ui <- function(id){
   ns <- NS(id)
   tagList(

@@ -11,6 +11,8 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @import ggplot2
+#' @import shinyBS
 mod_visu_graphique_ui <- function(id){
   ns <- NS(id)
   tagList(

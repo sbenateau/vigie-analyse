@@ -7,6 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @import dplyr
 mod_manip_group_by_ui <- function(id){
   ns <- NS(id)
   tagList(
