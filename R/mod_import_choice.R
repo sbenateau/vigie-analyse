@@ -177,8 +177,3 @@ mod_import_choice_server <- function(id, analysis_history, step_nb_react, parent
   })
 }
 
-## To be copied in the UI
-# mod_import_choice_ui("import_choice_1")
-
-## To be copied in the server
-# mod_import_choice_server("import_choice_1")

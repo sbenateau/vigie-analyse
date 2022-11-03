@@ -10,7 +10,7 @@
 app_ui <- function(request) {
   tagList(
     # Use js and dashboard function - for boxes and show / hide content
-    useShinyjs(),
+    shinyjs::useShinyjs(),
     useShinydashboardPlus(),
     # Leave this function for adding external resources
     golem_add_external_resources(),

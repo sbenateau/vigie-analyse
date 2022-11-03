@@ -45,7 +45,7 @@ mod_manip_group_by_server <- function(id, analysis_history, step_nb_react, paren
 
     cat("data wrangling : group_by\n")
 
-    observeEvent(input$launch_tool,{
+    observeEvent(input$launch_tool, {
 
       # populate select with datasets names
 
