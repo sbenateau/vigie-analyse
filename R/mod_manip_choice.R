@@ -19,7 +19,7 @@ mod_manip_choice_ui <- function(id){
     bsCollapse(id = "collapse_group_tool",
                multiple = TRUE,
                bsCollapsePanel("Découvrir ou utiliser cet outil",
-                               fluidRow(img(src = "http://galaxybricks.vigienature-ecole.fr/media/edito/2020/04/01/resumer.gif", align = "center", width="50%")),
+                               fluidRow(img(src = "http://bricks.vigienature-ecole.fr/media/edito/2020/04/01/resumer.gif", align = "center", width="50%")),
                                p("Cet outil permet de regrouper des lignes par catégorie (par type d'environnement par exemple) en faisant un calcul (une moyenne par exemple) sur les données d'une autre colonne."),
                                actionButton(ns("manip_tool_group_by"), "Utiliser cet outil",
                                             style = "color: #FFFFFF; background-color: #037971; border-color: #037971; font-size:120%")

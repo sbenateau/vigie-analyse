@@ -17,6 +17,7 @@ Imports:
     kableExtra,
     rmarkdown,
     shiny (>= 1.7.1),
+    shinyBS,
     shinydashboardPlus,
     shinyjs,
     shinyWidgets

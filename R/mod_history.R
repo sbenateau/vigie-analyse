@@ -35,7 +35,7 @@ mod_history_server <- function(id, history_datasets, step_nb){
                tagList(
                  br(), br(),
                  box(
-                   title = p(img(src = "http://galaxybricks.vigienature-ecole.fr/static/images/interface/Importer.png", height = "30px"),
+                   title = p(img(src = "http://bricks.vigienature-ecole.fr/static/images/interface/Importer.png", height = "30px"),
                              paste("Étape", step_nb, ":"), "Jeu de données"),
                    id = paste0("history_", step_nb),
                    closable = FALSE,
@@ -75,7 +75,7 @@ mod_history_server <- function(id, history_datasets, step_nb){
                tagList(
                  br(), br(),
                  box(
-                   title = p(img(src = "http://galaxybricks.vigienature-ecole.fr/static/images/interface/Question.png", height = "30px"),
+                   title = p(img(src = "http://bricks.vigienature-ecole.fr/static/images/interface/Question.png", height = "30px"),
                                  paste("Étape", step_nb, ":"), "Question de recherche"),
                    id = paste0("history_", step_nb),
                    closable = FALSE,
@@ -95,7 +95,7 @@ mod_history_server <- function(id, history_datasets, step_nb){
                tagList(
                  br(), br(),
                  box(
-                   title = p(img(src = "http://galaxybricks.vigienature-ecole.fr/static/images/interface/Visualiser.png", height = "30px"),
+                   title = p(img(src = "http://bricks.vigienature-ecole.fr/static/images/interface/Visualiser.png", height = "30px"),
                              paste("Étape", step_nb, ":"), "Graphique"),
                    id = paste0("history_", step_nb),
                    closable = FALSE,
