@@ -20,7 +20,7 @@ mod_visu_graphique_ui <- function(id){
     selectInput(ns("select_dataset"), label = "Faire un graphique à partir du jeu de données", choices = NULL),
     selectInput(ns("select_column_x"), label = "Axe des ordonnées (X)", choices = NULL),
     selectInput(ns("select_column_y"), label = "Axe des ordonnées (Y)", choices = NULL),
-    selectInput(ns("select_type"), label = "Type de graphique", choices = c("points", "lignes")),
+    selectInput(ns("select_type"), label = "Type de graphique", choices = c("points", "lignes", "barres")),
     bsCollapse(id = "advanced_option",
                bsCollapsePanel("Options avancées",
                                textInput(ns("x_label"), "Donner un nom personalisé à l'axe des x"),
@@ -114,7 +114,10 @@ mod_visu_graphique_server <- function(id, analysis_history, step_nb_react, paren
 
 
       output$graph_preview <- renderPlot({
-        rv$tool_result
+        plot_to_show <- rv$tool_result + theme(axis.text = element_text(size = 20),
+                                               axis.title = element_text(size = 25),
+                                               axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
+        plot_to_show
       })
 
       # store data
